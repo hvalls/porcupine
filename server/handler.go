@@ -13,15 +13,17 @@ func handleGetEvents(srv event.EventService, w http.ResponseWriter, r *http.Requ
 	vars := mux.Vars(r)
 	streamId, ok := vars["streamId"]
 	if !ok {
-		panic("invalid streamId param")
+		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
 	eventsRead, err := srv.Read(stream.StreamId(streamId))
 	if err != nil {
-		panic(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 	j, err := json.Marshal(eventsRead)
 	if err != nil {
-		panic(err)
+		w.WriteHeader(http.StatusInternalServerError)
 	}
 	w.Header().Add("content-type", "application/json")
 	w.Write(j)
