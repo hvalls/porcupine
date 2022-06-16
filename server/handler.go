@@ -35,14 +35,16 @@ func handlePostEvents(s event.EventService, w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	var e event.Event
-	err := json.NewDecoder(r.Body).Decode(&e)
+	var erm EventReqModel
+	err := json.NewDecoder(r.Body).Decode(&erm)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	err = s.Append(stream.StreamId(streamId), []event.Event{e})
+	err = s.Append(stream.StreamId(streamId), []event.Event{
+		erm.Event(streamId),
+	})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
