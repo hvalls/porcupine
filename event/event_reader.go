@@ -20,7 +20,13 @@ func (r *EventReader) Read(streamId stream.StreamId) (*[]Event, error) {
 	}
 	events := make([]Event, 0)
 	for _, record := range records {
-		event := NewEvent(EventId(record.EventId), stream.StreamId(record.StreamId), EventType(record.EventType), EventData(record.EventData))
+		event := New(
+			EventId(record.EventId),
+			EventNumber(record.EventNumber),
+			stream.StreamId(record.StreamId),
+			EventType(record.EventType),
+			EventData(record.EventData),
+		)
 		events = append(events, event)
 	}
 	return &events, nil

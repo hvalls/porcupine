@@ -1,9 +1,22 @@
 package buffer
 
 import (
+	"encoding/binary"
 	"io"
 	"strings"
 )
+
+func WriteUint32(w io.Writer, data uint32) error {
+	arr := make([]byte, 4)
+	binary.BigEndian.PutUint32(arr, data)
+	_, err := w.Write(arr)
+	return err
+}
+
+func ReadRangeUint32(data []byte, from int, to int) uint32 {
+	v := binary.BigEndian.Uint32(data[from:to])
+	return v
+}
 
 func Write(w io.Writer, data []byte) error {
 	_, err := w.Write([]byte(data))
@@ -36,7 +49,7 @@ func Read(r io.Reader, size int) ([]byte, error) {
 	return data, nil
 }
 
-func ReadRange(data []byte, from int, to int, trimZeros bool) string {
+func ReadRangeString(data []byte, from int, to int, trimZeros bool) string {
 	rangeData := string(data[from:to])
 	if !trimZeros {
 		return rangeData

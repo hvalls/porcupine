@@ -6,29 +6,41 @@ import (
 )
 
 const EventIdSize = 36 //UUID
+const EventNumberSize = 4
 const StreamIdSize = 32
 const EventTypeSize = 32
 const EventDataSize = 65536 //64kb
-const RecordSize = EventIdSize + StreamIdSize + EventTypeSize + EventDataSize
+const RecordSize = EventIdSize +
+	EventNumberSize +
+	StreamIdSize +
+	EventTypeSize +
+	EventDataSize
 
 type Record struct {
-	EventId   string
-	StreamId  string
-	EventType string
-	EventData []byte
+	EventId     string
+	EventNumber uint32
+	StreamId    string
+	EventType   string
+	EventData   []byte
 }
 
-func NewRecord(eventId string, streamId string, eventType string, eventData []byte) Record {
+func NewRecord(eventId string, eventNumber uint32, streamId string, eventType string, eventData []byte) Record {
 	return Record{
-		EventId:   eventId,
-		StreamId:  streamId,
-		EventType: eventType,
-		EventData: eventData,
+		EventId:     eventId,
+		EventNumber: eventNumber,
+		StreamId:    streamId,
+		EventType:   eventType,
+		EventData:   eventData,
 	}
 }
 
 func (r Record) Write(w io.Writer) error {
 	err := buffer.Write(w, []byte(r.EventId))
+	if err != nil {
+		return err
+	}
+
+	err = buffer.WriteUint32(w, r.EventNumber)
 	if err != nil {
 		return err
 	}
@@ -56,9 +68,10 @@ func ReadNext(r io.Reader) (*Record, error) {
 	if err != nil {
 		return nil, err
 	}
-	eventId := buffer.ReadRange(data, 0, EventIdSize, false)
-	streamId := buffer.ReadRange(data, EventIdSize, EventIdSize+StreamIdSize, true)
-	eventType := buffer.ReadRange(data, EventIdSize+StreamIdSize, EventIdSize+StreamIdSize+EventTypeSize, true)
-	eventData := buffer.ReadRange(data, EventIdSize+StreamIdSize+EventTypeSize, EventIdSize+StreamIdSize+EventTypeSize+EventDataSize, true)
-	return &Record{EventId: eventId, StreamId: streamId, EventType: eventType, EventData: []byte(eventData)}, nil
+	eventId := buffer.ReadRangeString(data, 0, EventIdSize, false)
+	eventNumber := buffer.ReadRangeUint32(data, EventIdSize, EventIdSize+EventNumberSize)
+	streamId := buffer.ReadRangeString(data, EventIdSize+EventNumberSize, EventIdSize+EventNumberSize+StreamIdSize, true)
+	eventType := buffer.ReadRangeString(data, EventIdSize+EventNumberSize+StreamIdSize, EventIdSize+EventNumberSize+StreamIdSize+EventTypeSize, true)
+	eventData := buffer.ReadRangeString(data, EventIdSize+EventNumberSize+StreamIdSize+EventTypeSize, EventIdSize+EventNumberSize+StreamIdSize+EventTypeSize+EventDataSize, true)
+	return &Record{EventId: eventId, EventNumber: eventNumber, StreamId: streamId, EventType: eventType, EventData: []byte(eventData)}, nil
 }

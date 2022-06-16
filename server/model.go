@@ -12,8 +12,8 @@ type EventReqModel struct {
 	Data string `json:"data"`
 }
 
-func (erm EventReqModel) Event(streamId string) event.Event {
-	return event.NewEvent(
+func (erm EventReqModel) WriteModel(streamId string) event.EventWriteModel {
+	return event.NewWriteModel(
 		event.EventId(uuid.New().String()),
 		stream.StreamId(streamId),
 		event.EventType(erm.Type),

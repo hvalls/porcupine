@@ -21,6 +21,6 @@ func (s EventService) Read(streamId stream.StreamId) (*[]Event, error) {
 	return s.reader.Read(streamId)
 }
 
-func (s EventService) Append(streamId stream.StreamId, ee []Event) error {
+func (s EventService) Append(streamId stream.StreamId, ee []EventWriteModel) error {
 	return s.appender.Append(ee)
 }

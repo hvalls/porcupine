@@ -14,6 +14,11 @@ func GetChunk(streamId string) Chunk {
 	return Chunk{resolveFileName(streamId)}
 }
 
+func (c Chunk) NextEventNumber() uint32 {
+	//TODO implement this
+	return 1
+}
+
 func (c Chunk) Write(r Record) error {
 	w, f, err := file.NewFileWriter(c.filename)
 	if err != nil {

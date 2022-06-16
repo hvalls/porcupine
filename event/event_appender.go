@@ -12,10 +12,9 @@ func NewEventAppender(s record.RecordService) EventAppender {
 	return EventAppender{s}
 }
 
-func (w *EventAppender) Append(evs []Event) error {
+func (w *EventAppender) Append(evs []EventWriteModel) error {
 	for _, ev := range evs {
-		r := record.NewRecord(string(ev.Id), string(ev.StreamId), string(ev.Type), ev.Data)
-		err := w.s.Append(r)
+		err := w.s.Append(string(ev.Id), string(ev.StreamId), string(ev.Type), ev.Data)
 		if err != nil {
 			return err
 		}
