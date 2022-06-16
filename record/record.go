@@ -5,7 +5,7 @@ import (
 	"porcupine/buffer"
 )
 
-const EventIdSize = 32
+const EventIdSize = 36 //UUID
 const StreamIdSize = 32
 const EventTypeSize = 32
 const EventDataSize = 65536 //64kb

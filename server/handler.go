@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"porcupine/event"
 	"porcupine/stream"
@@ -42,16 +43,15 @@ func handlePostEvents(s event.EventService, w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	err = s.Append(stream.StreamId(streamId), []event.Event{
-		erm.Event(streamId),
-	})
+	e := erm.Event(streamId)
+	err = s.Append(stream.StreamId(streamId), []event.Event{e})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	w.Header().Add("content-type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte("{ \"success\": true }"))
+	w.Write([]byte(fmt.Sprintf("{\"id\":\"%s\"}", e.Id)))
 }
 
 func getStreamId(r *http.Request) (string, bool) {
