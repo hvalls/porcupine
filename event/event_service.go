@@ -21,6 +21,7 @@ func (s EventService) Read(streamId stream.StreamId) (*[]Event, error) {
 	return s.reader.Read(streamId)
 }
 
-func (s EventService) Append(ee []Event) error {
+func (s EventService) Append(streamId stream.StreamId, ee []Event) error {
+	//TODO: Validate ee.StreamId == streamId
 	return s.appender.Append(ee)
 }

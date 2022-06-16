@@ -15,6 +15,8 @@ func Listen(s event.EventService) {
 		switch r.Method {
 		case http.MethodGet:
 			handleGetEvents(s, w, r)
+		case http.MethodPost:
+			handlePostEvents(s, w, r)
 		default:
 		}
 	})
