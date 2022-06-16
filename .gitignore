@@ -1,4 +1,2 @@
-server
-main.go
 *.porcupine
 Makefile

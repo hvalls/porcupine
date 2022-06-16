@@ -50,5 +50,5 @@ func (c Chunk) Read() ([]Record, error) {
 }
 
 func resolveFileName(streamId string) string {
-	return fmt.Sprintf("%s.porcupine.stream", streamId)
+	return fmt.Sprintf("%s.stream.porcupine", streamId)
 }
