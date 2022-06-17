@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	"porcupine/event"
 	"porcupine/record"
 	"porcupine/server"
@@ -9,6 +10,12 @@ import (
 func main() {
 	recordService := record.NewRecordService()
 	eventService := event.NewEventService(recordService)
+	server := server.NewServer(eventService)
 
-	server.Listen(eventService)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	server.Listen(port)
 }

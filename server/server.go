@@ -8,19 +8,18 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func Listen(s event.EventService) {
+type Server struct {
+	s event.EventService
+}
+
+func NewServer(s event.EventService) Server {
+	return Server{s}
+}
+
+func (s Server) Listen(port string) {
 	r := mux.NewRouter()
+	r.Path("/streams/{streamId}/events").Methods(http.MethodGet, http.MethodPost).HandlerFunc(s.handleEvents)
 
-	r.HandleFunc("/streams/{streamId}/events", func(w http.ResponseWriter, r *http.Request) {
-		switch r.Method {
-		case http.MethodGet:
-			handleGetEvents(s, w, r)
-		case http.MethodPost:
-			handlePostEvents(s, w, r)
-		default:
-		}
-	})
-
-	fmt.Println("server listening at port 8080")
-	http.ListenAndServe(":8080", r)
+	fmt.Printf("server listening at port %s\n", port)
+	http.ListenAndServe(fmt.Sprintf(":%s", port), r)
 }

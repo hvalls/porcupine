@@ -10,13 +10,22 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func handleGetEvents(s event.EventService, w http.ResponseWriter, r *http.Request) {
+func (s Server) handleEvents(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodGet:
+		s.handleGetEvents(w, r)
+	case http.MethodPost:
+		s.handlePostEvents(w, r)
+	}
+}
+
+func (s Server) handleGetEvents(w http.ResponseWriter, r *http.Request) {
 	streamId, ok := getStreamId(r)
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	eventsRead, err := s.Read(stream.StreamId(streamId))
+	eventsRead, err := s.s.Read(stream.StreamId(streamId))
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -29,7 +38,7 @@ func handleGetEvents(s event.EventService, w http.ResponseWriter, r *http.Reques
 	w.Write(j)
 }
 
-func handlePostEvents(s event.EventService, w http.ResponseWriter, r *http.Request) {
+func (s Server) handlePostEvents(w http.ResponseWriter, r *http.Request) {
 	streamId, ok := getStreamId(r)
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
@@ -44,7 +53,7 @@ func handlePostEvents(s event.EventService, w http.ResponseWriter, r *http.Reque
 	}
 
 	e := erm.WriteModel(streamId)
-	err = s.Append(stream.StreamId(streamId), []event.EventWriteModel{e})
+	err = s.s.Append(stream.StreamId(streamId), []event.EventWriteModel{e})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
