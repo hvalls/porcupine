@@ -12,7 +12,6 @@ Request params:
 |Property|Type|
 |---|---|
 |streamId|String|  
-|   |   |  
 
 
 Response body:
@@ -21,7 +20,6 @@ Response body:
 |---|---|
 |success|boolean|  
 |events|Event[]|  
-|   |   |  
 
 ### **POST /streams/{streamId}/events**
 
@@ -31,21 +29,18 @@ Request params:
 |Property|Type|
 |---|---|
 |streamId|String|  
-|   |   |  
 
 Request body:
 |Property|Type|
 |---|---|
 |type|String|  
 |data|string|  
-|   |   |  
 
 Response body:
 
 |Property|Type|
 |---|---|
 |success|boolean|  
-|   |   |  
 
 ### **Type: Event**
 |Property|Type|
@@ -55,4 +50,3 @@ Response body:
 |streamId|string|  
 |type|string|  
 |data|string|  
-|   |   |  
