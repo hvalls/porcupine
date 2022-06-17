@@ -13,9 +13,20 @@ func WriteUint32(w io.Writer, data uint32) error {
 	return err
 }
 
+func WriteUint8(w io.Writer, data uint8) error {
+	arr := make([]byte, 1)
+	arr[0] = data
+	_, err := w.Write(arr)
+	return err
+}
+
 func ReadRangeUint32(data []byte, from int, to int) uint32 {
 	v := binary.BigEndian.Uint32(data[from:to])
 	return v
+}
+
+func ReadRangeUint8(data []byte, from int, to int) uint8 {
+	return data[from:to][0]
 }
 
 func Write(w io.Writer, data []byte) error {
