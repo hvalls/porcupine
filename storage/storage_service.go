@@ -1,5 +1,10 @@
 package storage
 
+import (
+	"porcupine/chunk"
+	"porcupine/record"
+)
+
 type StorageService struct {
 }
 
@@ -13,12 +18,9 @@ func (s StorageService) Append(
 	eventType string,
 	eventData []byte,
 ) error {
-	chunk := GetChunk(streamId)
-	eventNumber := chunk.NextEventNumber()
-	r := NewRecord(eventId, eventNumber, streamId, eventType, eventData)
-	return chunk.Write(r)
+	return chunk.GetChunk(streamId).WriteRecord(eventId, eventType, eventData)
 }
 
-func (s StorageService) GetRecords(streamId string) ([]Record, error) {
-	return GetChunk(streamId).GetRecords()
+func (s StorageService) GetRecords(streamId string) ([]record.Record, error) {
+	return chunk.GetChunk(streamId).ReadRecords()
 }
