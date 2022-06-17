@@ -10,8 +10,8 @@ func newStreamReader(s storage.StorageService) streamReader {
 	return streamReader{s}
 }
 
-func (r *streamReader) Read(streamId StreamId) (*[]Event, error) {
-	records, err := r.s.Read(string(streamId))
+func (r *streamReader) read(streamId StreamId) (*[]Event, error) {
+	records, err := r.s.GetRecords(string(streamId))
 	if err != nil {
 		return nil, err
 	}

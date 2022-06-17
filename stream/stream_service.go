@@ -15,9 +15,9 @@ func NewStreamService(s storage.StorageService) StreamService {
 }
 
 func (s StreamService) Read(streamId StreamId) (*[]Event, error) {
-	return s.reader.Read(streamId)
+	return s.reader.read(streamId)
 }
 
 func (s StreamService) Append(streamId StreamId, ee []EventWriteModel) error {
-	return s.appender.Append(ee)
+	return s.appender.append(ee)
 }

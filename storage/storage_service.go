@@ -19,6 +19,6 @@ func (s StorageService) Append(
 	return chunk.Write(r)
 }
 
-func (s StorageService) Read(streamId string) ([]Record, error) {
-	return GetChunk(streamId).Read()
+func (s StorageService) GetRecords(streamId string) ([]Record, error) {
+	return GetChunk(streamId).GetRecords()
 }

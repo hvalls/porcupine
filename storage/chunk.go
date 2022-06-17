@@ -32,7 +32,7 @@ func (c Chunk) Write(r Record) error {
 	return w.Flush()
 }
 
-func (c Chunk) Read() ([]Record, error) {
+func (c Chunk) GetRecords() ([]Record, error) {
 	r, f, err := file.NewFileReader(c.filename)
 	if err != nil {
 		return nil, err
