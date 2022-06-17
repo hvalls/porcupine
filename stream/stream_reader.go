@@ -1,19 +1,18 @@
-package event
+package stream
 
 import (
 	"porcupine/record"
-	"porcupine/stream"
 )
 
-type EventReader struct {
+type streamReader struct {
 	s record.RecordService
 }
 
-func NewEventReader(s record.RecordService) EventReader {
-	return EventReader{s}
+func newStreamReader(s record.RecordService) streamReader {
+	return streamReader{s}
 }
 
-func (r *EventReader) Read(streamId stream.StreamId) (*[]Event, error) {
+func (r *streamReader) Read(streamId StreamId) (*[]Event, error) {
 	records, err := r.s.Read(string(streamId))
 	if err != nil {
 		return nil, err
@@ -23,7 +22,7 @@ func (r *EventReader) Read(streamId stream.StreamId) (*[]Event, error) {
 		event := New(
 			EventId(record.EventId),
 			EventNumber(record.EventNumber),
-			stream.StreamId(record.StreamId),
+			StreamId(record.StreamId),
 			EventType(record.EventType),
 			EventData(record.EventData),
 		)

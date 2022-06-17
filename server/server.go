@@ -3,16 +3,16 @@ package server
 import (
 	"fmt"
 	"net/http"
-	"porcupine/event"
+	"porcupine/stream"
 
 	"github.com/gorilla/mux"
 )
 
 type Server struct {
-	s event.EventService
+	s stream.StreamService
 }
 
-func NewServer(s event.EventService) Server {
+func NewServer(s stream.StreamService) Server {
 	return Server{s}
 }
 

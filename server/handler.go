@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"porcupine/event"
 	"porcupine/stream"
 
 	"github.com/gorilla/mux"
@@ -53,7 +52,7 @@ func (s Server) handlePostEvents(w http.ResponseWriter, r *http.Request) {
 	}
 
 	e := erm.WriteModel(streamId)
-	err = s.s.Append(stream.StreamId(streamId), []event.EventWriteModel{e})
+	err = s.s.Append(stream.StreamId(streamId), []stream.EventWriteModel{e})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
