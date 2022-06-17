@@ -6,9 +6,16 @@ Event-sourcing database
 
 ### **GET /streams/{streamId}/events**
 
-Get stream events
+Get stream events.
 
-Response:
+Request params: 
+|Property|Type|
+|---|---|
+|streamId|String|  
+|   |   |  
+
+
+Response body:
 
 |Property|Type|
 |---|---|
@@ -18,16 +25,22 @@ Response:
 
 ### **POST /streams/{streamId}/events**
 
-Append stream event
+Append stream event.
 
-Request:
+Request params: 
+|Property|Type|
+|---|---|
+|streamId|String|  
+|   |   |  
+
+Request body:
 |Property|Type|
 |---|---|
 |type|String|  
 |data|string|  
 |   |   |  
 
-Response:
+Response body:
 
 |Property|Type|
 |---|---|
