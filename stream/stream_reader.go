@@ -1,14 +1,12 @@
 package stream
 
-import (
-	"porcupine/record"
-)
+import "porcupine/storage"
 
 type streamReader struct {
-	s record.RecordService
+	s storage.StorageService
 }
 
-func newStreamReader(s record.RecordService) streamReader {
+func newStreamReader(s storage.StorageService) streamReader {
 	return streamReader{s}
 }
 

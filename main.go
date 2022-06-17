@@ -2,14 +2,14 @@ package main
 
 import (
 	"os"
-	"porcupine/record"
 	"porcupine/server"
+	"porcupine/storage"
 	"porcupine/stream"
 )
 
 func main() {
-	recordService := record.NewRecordService()
-	streamService := stream.NewStreamService(recordService)
+	storageService := storage.NewStorageService()
+	streamService := stream.NewStreamService(storageService)
 	server := server.NewServer(streamService)
 
 	port := os.Getenv("PORT")

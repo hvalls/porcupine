@@ -1,14 +1,14 @@
 package stream
 
 import (
-	"porcupine/record"
+	"porcupine/storage"
 )
 
 type streamAppender struct {
-	s record.RecordService
+	s storage.StorageService
 }
 
-func newStreamAppender(s record.RecordService) streamAppender {
+func newStreamAppender(s storage.StorageService) streamAppender {
 	return streamAppender{s}
 }
 

@@ -1,13 +1,13 @@
-package record
+package storage
 
-type RecordService struct {
+type StorageService struct {
 }
 
-func NewRecordService() RecordService {
-	return RecordService{}
+func NewStorageService() StorageService {
+	return StorageService{}
 }
 
-func (s RecordService) Append(
+func (s StorageService) Append(
 	eventId string,
 	streamId string,
 	eventType string,
@@ -19,6 +19,6 @@ func (s RecordService) Append(
 	return chunk.Write(r)
 }
 
-func (s RecordService) Read(streamId string) ([]Record, error) {
+func (s StorageService) Read(streamId string) ([]Record, error) {
 	return GetChunk(streamId).Read()
 }
