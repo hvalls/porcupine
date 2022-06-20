@@ -1,0 +1,88 @@
+openapi: "3.0.3"
+info:
+  version: "1.0.0"
+  title: "Porcupine HTTP API Reference"
+
+paths:
+  /streams:
+    post:
+      summary: Create new stream
+      operationId: createStream
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+      responses:
+        201:
+          description: Stream created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Id'
+              
+  /streams/{id}/events:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Get stream events
+      operationId: getStreamEvents
+      responses:
+        200:
+          description: Stream events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+    post:
+      summary: Append stream event
+      operationId: appendStreamEvent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                data:
+                  type: string
+                  format: byte
+      responses:
+        201:
+          description: Event appended
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Id'
+    
+components:
+  schemas:
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+        number:
+          type: number
+        streamId:
+          type: string
+        type:
+          type: string
+        data:
+          type: string
+          format: byte
+    Id:
+      type: object
+      properties:
+        id:
+          type: string
