@@ -52,7 +52,7 @@ func (c fileChunk) WriteRecord(eventId string, eventType string, eventData []byt
 }
 
 func (c fileChunk) ReadRecords() ([]record.Record, error) {
-	r, f, err := file.NewFileReader(c.fileName)
+	f, err := file.OpenReadable(c.fileName)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +62,7 @@ func (c fileChunk) ReadRecords() ([]record.Record, error) {
 
 	var records []record.Record
 	for {
-		record, err := record.Read(r)
+		record, err := record.Read(f)
 		if err != nil {
 			if err == io.EOF {
 				break
