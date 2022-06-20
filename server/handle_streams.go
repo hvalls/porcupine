@@ -3,7 +3,6 @@ package server
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"porcupine/stream"
 )
@@ -25,7 +24,11 @@ func (s Server) handlePostStream(w http.ResponseWriter, r *http.Request) {
 
 	err = s.s.Create(stream.StreamId(srm.Id))
 	if err != nil {
-		log.Fatal(err)
+
+		if err.Error() == "StreamAlreadyExists" {
+			w.WriteHeader(http.StatusConflict)
+			return
+		}
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}

@@ -1,3 +1,4 @@
-*.porcupine
+*.chunk.*
 Makefile
 porcupine
+streams

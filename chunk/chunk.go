@@ -58,7 +58,7 @@ func (c fileChunk) ReadRecords() ([]record.Record, error) {
 	}
 	defer f.Close()
 
-	f.Seek(chunkHeaderSize, 0)
+	f.Seek(chunkHeaderSize, io.SeekStart)
 
 	var records []record.Record
 	for {
@@ -76,5 +76,5 @@ func (c fileChunk) ReadRecords() ([]record.Record, error) {
 }
 
 func resolveFileName(streamId string) string {
-	return fmt.Sprintf("%s.stream.porcupine", streamId)
+	return fmt.Sprintf("%s.chunk.1", streamId)
 }
