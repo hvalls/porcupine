@@ -17,27 +17,38 @@ type fileChunk struct {
 	fileName string
 }
 
+func CreateChunk(streamId string) error {
+	f, err := file.OpenWritable(resolveFileName(streamId))
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	return newChunkHeader(0).write(f)
+}
+
 func GetChunk(streamId string) Chunk {
 	return fileChunk{streamId, resolveFileName(streamId)}
 }
 
 func (c fileChunk) WriteRecord(eventId string, eventType string, eventData []byte) error {
-
-	//TODO implement this
-	nextEventNumber := 1
-
-	r := record.New(eventId, uint32(nextEventNumber), c.streamId, eventType, eventData)
-
-	w, f, err := file.NewFileWriter(c.fileName)
+	f, err := file.OpenWritable(c.fileName)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
-	err = r.Write(w)
+	h, err := readHeader(f)
 	if err != nil {
 		return err
 	}
-	return w.Flush()
+	h.incrementEventCount()
+	record := record.New(eventId, uint32(h.eventCount), c.streamId, eventType, eventData)
+	f.Seek(0, io.SeekEnd)
+	err = record.Write(f)
+	if err != nil {
+		return err
+	}
+	f.Seek(0, io.SeekStart)
+	return h.write(f)
 }
 
 func (c fileChunk) ReadRecords() ([]record.Record, error) {
@@ -46,6 +57,8 @@ func (c fileChunk) ReadRecords() ([]record.Record, error) {
 		return nil, err
 	}
 	defer f.Close()
+
+	f.Seek(chunkHeaderSize, 0)
 
 	var records []record.Record
 	for {

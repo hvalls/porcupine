@@ -12,7 +12,11 @@ func NewStorageService() StorageService {
 	return StorageService{}
 }
 
-func (s StorageService) Append(
+func (s StorageService) CreateStream(streamId string) error {
+	return chunk.CreateChunk(streamId)
+}
+
+func (s StorageService) StoreRecord(
 	eventId string,
 	streamId string,
 	eventType string,

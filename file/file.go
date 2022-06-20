@@ -6,8 +6,12 @@ import (
 	"os"
 )
 
+func OpenWritable(filename string) (*os.File, error) {
+	return os.OpenFile(filename, os.O_CREATE|os.O_RDWR, 0600)
+}
+
 func NewFileWriter(filename string) (*bufio.Writer, *os.File, error) {
-	f, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE, 0600)
 	if err != nil {
 		return nil, nil, err
 	}

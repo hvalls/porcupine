@@ -19,3 +19,7 @@ func (erm EventReqModel) WriteModel(streamId string) stream.EventWriteModel {
 		stream.EventData(erm.Data),
 	)
 }
+
+type StreamReqModel struct {
+	Id string `json:"id"`
+}

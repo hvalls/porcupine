@@ -18,6 +18,7 @@ func NewServer(s stream.StreamService) Server {
 
 func (s Server) Listen(port string) {
 	r := mux.NewRouter()
+	r.Path("/streams").Methods(http.MethodPost).HandlerFunc(s.handleStreams)
 	r.Path("/streams/{streamId}/events").Methods(http.MethodGet, http.MethodPost).HandlerFunc(s.handleEvents)
 
 	fmt.Printf("server listening at port %s\n", port)
