@@ -46,7 +46,11 @@ func (s StorageService) StoreRecord(
 }
 
 func (s StorageService) GetRecords(streamId string) ([]record.Record, error) {
-	return chunk.GetChunk(streamId).ReadRecords()
+	chunk := chunk.GetChunk(streamId)
+	if chunk == nil {
+		return []record.Record{}, nil
+	}
+	return chunk.ReadRecords()
 }
 
 func readStreams() ([]string, error) {

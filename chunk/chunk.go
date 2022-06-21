@@ -1,8 +1,10 @@
 package chunk
 
 import (
+	"errors"
 	"fmt"
 	"io"
+	"os"
 	"porcupine/file"
 	"porcupine/record"
 )
@@ -27,6 +29,11 @@ func CreateChunk(streamId string) error {
 }
 
 func GetChunk(streamId string) Chunk {
+	filename := resolveFileName(streamId)
+	_, err := os.Stat(filename)
+	if errors.Is(err, os.ErrNotExist) {
+		return nil
+	}
 	return fileChunk{streamId, resolveFileName(streamId)}
 }
 
