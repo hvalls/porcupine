@@ -1,6 +1,6 @@
 # PORCUPINE
 
-Event-sourcing database
+Event-sourcing database. This repo is only for academic purposes.
 
 ## Run
 
